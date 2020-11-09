@@ -50,7 +50,12 @@ def weather_command_message(message):
                 current_time_departed = datetime.timedelta(minutes = int(time_departed[1]))
                 nowtime = current_time_departed - times
                 nowtime = str(nowtime).rsplit(':')[1]
-                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной станции в {str(arrived_time)[:5]}. До его отправления осталось {nowtime} мин.') 
+                verification_time = str(nowtime).rsplit("0")
+                if verification_time[0] == "":
+                    verification_time = verification_time[1]
+                else:
+                    verification_time = nowtime
+                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной станции в {str(arrived_time)[:5]}. До его отправления осталось {verification_time} мин.') 
                 if current_send == 1:
                     break
     elif message.text == 'Узнать расписание для маршрута №2':
@@ -69,11 +74,17 @@ def weather_command_message(message):
                 current_time_departed = datetime.timedelta(minutes = int(time_departed[1]))
                 nowtime = current_time_departed - times
                 nowtime = str(nowtime).rsplit(':')[1]
-                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной станции в {str(arrived_time)[:5]}. До его отправления осталось {nowtime} мин.') 
+                verification_time = str(nowtime).rsplit("0")
+                if verification_time[0] == "":
+                    verification_time = verification_time[1]
+                else:
+                    verification_time = nowtime
+                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной станции в {str(arrived_time)[:5]}. До его отправления осталось {verification_time} мин.') 
                 if current_send == 1:
                     break
     else:
         bot.send_message(message.from_user.id, "Хм. Что-то я не припомню такой команды... Воспользуйся /help")
         print(message.from_user.username)
 
+	
 bot.polling(none_stop = True)
