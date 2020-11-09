@@ -55,7 +55,7 @@ def weather_command_message(message):
                     verification_time = verification_time[1]
                 else:
                     verification_time = nowtime
-                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной станции в {str(arrived_time)[:5]}. До его отправления осталось {verification_time} мин.') 
+                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной (ост. «Кладбище» / д/с «Сказка») станции в {str(arrived_time)[:5]}. До его отправления осталось {verification_time} мин.') 
                 if current_send == 1:
                     break
     elif message.text == 'Узнать расписание для маршрута №2':
@@ -79,7 +79,7 @@ def weather_command_message(message):
                     verification_time = verification_time[1]
                 else:
                     verification_time = nowtime
-                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной станции в {str(arrived_time)[:5]}. До его отправления осталось {verification_time} мин.') 
+                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной (ул. Ивановская (Шоссейная) / ост. «Магазин №5») станции в {str(arrived_time)[:5]}. До его отправления осталось {verification_time} мин.') 
                 if current_send == 1:
                     break
     else:
