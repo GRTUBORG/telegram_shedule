@@ -37,6 +37,8 @@ def weather_command_message(message):
     if message.text == 'Узнать расписание для маршрута №1':
         current_time_moscow = datetime.datetime.now(datetime.timezone.utc) + delta
         nowtime = current_time_moscow.strftime("%X")
+	if nowtime > '22:00:00':
+            bot.send_message(message.from_user.id, "Увы, но следующий рейс будет только в 5:30 утра. Просьба подождать!")
         times = nowtime[:5].rsplit(':')
         times = datetime.timedelta(minutes = int(times[1]))
         data_loads = json.load(open('./расписание.json'))
@@ -61,6 +63,8 @@ def weather_command_message(message):
     elif message.text == 'Узнать расписание для маршрута №2':
         current_time_moscow = datetime.datetime.now(datetime.timezone.utc) + delta
         nowtime = current_time_moscow.strftime("%X")
+	if nowtime > '22:00:00':
+            bot.send_message(message.from_user.id, "Увы, но следующий рейс будет только в 5:30 утра. Просьба подождать!")
         times = nowtime[:5].rsplit(':')
         times = datetime.timedelta(minutes = int(times[1]))
         data_loads = json.load(open('./расписание.json'))
