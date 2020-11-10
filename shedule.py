@@ -56,7 +56,10 @@ def weather_command_message(message):
                     verification_time = verification_time[1]
                 else:
                     verification_time = nowtime
-                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной *(ост. «Кладбище» / д/с «Сказка»)* станции в `{str(arrived_time)[:5]}`. До его отправления осталось `{verification_time}` мин.', parse_mode = 'Markdown') 
+		keyboard = types.InlineKeyboardMarkup()
+                callback_button = types.InlineKeyboardButton(text = "Показать остановки", callback_data = "stations_1")
+                keyboard.add(callback_button)
+                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной *(ост. «Кладбище» / д/с «Сказка»)* станции в `{str(arrived_time)[:5]}`. До его отправления осталось `{verification_time}` мин.', parse_mode = 'Markdown', reply_markup = keyboard)
                 if current_send == 1:
                     break
     elif message.text == 'Узнать расписание для маршрута №2':
@@ -82,11 +85,38 @@ def weather_command_message(message):
                     verification_time = verification_time[1]
                 else:
                     verification_time = nowtime
-                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной *(ул. Ивановская (Шоссейная) / ост. «Магазин №5»)* станции в `{str(arrived_time)[:5]}`. До его отправления осталось `{verification_time}` мин.', parse_mode = 'Markdown') 
+		keyboard = types.InlineKeyboardMarkup()
+                callback_button = types.InlineKeyboardButton(text = "Показать остановки", callback_data = "stations_2")
+                keyboard.add(callback_button)
+                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной *(ул. Ивановская (Шоссейная) / ост. «Магазин №5»)* станции в `{str(arrived_time)[:5]}`. До его отправления осталось `{verification_time}` мин.', parse_mode = 'Markdown', reply_markup = keyboard)
                 if current_send == 1:
                     break
     else:
         bot.send_message(message.from_user.id, "Хм. Что-то я не припомню такой команды... Воспользуйся /help")
         print(message.from_user.username)
+	
+@bot.callback_query_handler(func = lambda call: True)
+def callback_inline(call):
+    if call.message:
+        if call.data == "stations_1":
+            data_loads = json.load(open('./остановки.json'))
+            data = json.dumps(data_loads)
+            json_data = json.loads(data)
+            route1_daycare = json_data["Маршрут №1"]
+            layout = ''
+            for station_1 in route1_daycare:
+                station_1_true = station_1.replace('  ', '\n')
+                layout += station_1_true
+            bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = layout)
+        else:
+            data_loads2 = json.load(open('./остановки.json'))
+            data2 = json.dumps(data_loads2)
+            json_data2 = json.loads(data2)
+            route2_daycare = json_data2["Маршрут №2"]
+            layout2 = ''
+            for station_2 in route2_daycare:
+                station_2_true = station_2.replace('  ', '\n')
+                layout2 += station_2_true
+            bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = layout2)
 
 bot.polling(none_stop = True)
