@@ -53,7 +53,7 @@ def stations_command_message(message):
         for arrived_time in route1_daycare:
             current_send = 1
             if arrived_time > nowtime: #Знак < - ушедшие рейсы, > - наоборот
-		        keys = route1_daycare.get(arrived_time)
+                keys = route1_daycare.get(arrived_time)
                 length = length - int(keys)
                 length = str(length)
                 data_loads_previous = json.load(open('./предыдущие_маршруты.json'))
