@@ -1,5 +1,4 @@
 import telebot
-import time
 import datetime
 import json
 import os
@@ -29,7 +28,7 @@ def switch(message):
     route1_button = types.KeyboardButton(text = "Узнать расписание для маршрута №1")
     route2_button = types.KeyboardButton(text = "Узнать расписание для маршрута №2")
     keyboard.add(route1_button, route2_button)
-    bot.send_message(message.chat.id, f"Текущие дата и время: {nowtime}. Воспользуйся клавиатурой ниже, чтобы узнать расписание!", reply_markup = keyboard)
+    bot.send_message(message.chat.id, f"Текущие дата и время: `{nowtime}`. Воспользуйся клавиатурой ниже, чтобы узнать расписание!", parse_mode = 'Markdown', reply_markup = keyboard)
 
 
 @bot.message_handler(content_types = ['text'])
@@ -37,6 +36,8 @@ def weather_command_message(message):
     if message.text == 'Узнать расписание для маршрута №1':
         current_time_moscow = datetime.datetime.now(datetime.timezone.utc) + delta
         nowtime = current_time_moscow.strftime("%X")
+        if nowtime > '22:00:00':
+            bot.send_message(message.from_user.id, "Увы, но следующий рейс будет только в 5:30 утра")
         times = nowtime[:5].rsplit(':')
         times = datetime.timedelta(minutes = int(times[1]))
         data_loads = json.load(open('./расписание.json'))
@@ -55,12 +56,14 @@ def weather_command_message(message):
                     verification_time = verification_time[1]
                 else:
                     verification_time = nowtime
-                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной (ост. «Кладбище» / д/с «Сказка») станции в {str(arrived_time)[:5]}. До его отправления осталось {verification_time} мин.') 
+                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной *(ост. «Кладбище» / д/с «Сказка»)* станции в `{str(arrived_time)[:5]}`. До его отправления осталось `{verification_time}` мин.', parse_mode = 'Markdown') 
                 if current_send == 1:
                     break
     elif message.text == 'Узнать расписание для маршрута №2':
         current_time_moscow = datetime.datetime.now(datetime.timezone.utc) + delta
         nowtime = current_time_moscow.strftime("%X")
+        if nowtime > '22:00:00':
+            bot.send_message(message.from_user.id, "Увы, но следующий рейс будет только в 5:30 утра")
         times = nowtime[:5].rsplit(':')
         times = datetime.timedelta(minutes = int(times[1]))
         data_loads = json.load(open('./расписание.json'))
@@ -79,12 +82,11 @@ def weather_command_message(message):
                     verification_time = verification_time[1]
                 else:
                     verification_time = nowtime
-                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной (ул. Ивановская (Шоссейная) / ост. «Магазин №5») станции в {str(arrived_time)[:5]}. До его отправления осталось {verification_time} мин.') 
+                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной *(ул. Ивановская (Шоссейная) / ост. «Магазин №5»)* станции в `{str(arrived_time)[:5]}`. До его отправления осталось `{verification_time}` мин.', parse_mode = 'Markdown') 
                 if current_send == 1:
                     break
     else:
         bot.send_message(message.from_user.id, "Хм. Что-то я не припомню такой команды... Воспользуйся /help")
         print(message.from_user.username)
 
-	
 bot.polling(none_stop = True)
