@@ -36,7 +36,7 @@ def switch(message):
 
 call_data = ["stations_1", "stations_2", "back_stations1", "back_stations2"]
 @bot.message_handler(content_types = ['text'])
-def weather_command_message(message):
+def stations_command_message(message):
     global new_arrived_time, verification_time
     if message.text == 'Узнать расписание для маршрута №1':
         current_time_moscow = datetime.datetime.now(datetime.timezone.utc) + delta
@@ -104,7 +104,7 @@ def weather_command_message(message):
         print(message.from_user.username)
 	
 @bot.callback_query_handler(func = lambda call: True)
-def callback_inline1(call):
+def callback_inline(call):
     if call.message:
         if call.data == call_data[2]:
             keyboard = types.InlineKeyboardMarkup()
