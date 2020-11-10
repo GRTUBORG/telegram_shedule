@@ -5,9 +5,9 @@ import os
 
 from telebot import types
 
+token = os.environ.get('bot_token')
+bot = telebot.TeleBot(str(token))
 try:
-	token = os.environ.get('bot_token')
-	bot = telebot.TeleBot(str(token))
 	print('Бот работает!')
 	delta = datetime.timedelta(hours = 3, minutes = 0)
 
