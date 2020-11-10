@@ -85,7 +85,7 @@ def weather_command_message(message):
                     verification_time = verification_time[1]
                 else:
                     verification_time = nowtime
-		        keyboard = types.InlineKeyboardMarkup()
+                keyboard = types.InlineKeyboardMarkup()
                 callback_button = types.InlineKeyboardButton(text = "Показать остановки", callback_data = "stations_2")
                 keyboard.add(callback_button)
                 bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной *(ул. Ивановская (Шоссейная) / ост. «Магазин №5»)* станции в `{str(arrived_time)[:5]}`. До его отправления осталось `{verification_time}` мин.', parse_mode = 'Markdown', reply_markup = keyboard)
