@@ -7,10 +7,9 @@ from telebot import types
 
 token = os.environ.get('bot_token')
 bot = telebot.TeleBot(str(token))
+delta = datetime.timedelta(hours = 3, minutes = 0)
 try:
 	print('Бот работает!')
-	delta = datetime.timedelta(hours = 3, minutes = 0)
-
 	@bot.message_handler(commands = ['start'])
 	def send_welcome(message):
 		t = datetime.datetime.now(datetime.timezone.utc) + delta
