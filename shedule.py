@@ -108,7 +108,7 @@ def callback_inline(call):
             for station_1 in route1_daycare:
                 station_1_true = station_1.replace('  ', '\n')
                 layout += station_1_true
-            bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = layout)
+            bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'*Из мкр. Красные Сосенки:* \n{layout}', parse_mode = 'Markdown')
         else:
             data_loads2 = json.load(open('./остановки.json'))
             data2 = json.dumps(data_loads2)
@@ -118,6 +118,6 @@ def callback_inline(call):
             for station_2 in route2_daycare:
                 station_2_true = station_2.replace('  ', '\n')
                 layout2 += station_2_true
-            bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = layout2)
+            bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'*Из мкр. Красные Сосенки:* \n{layout2}', parse_mode = 'Markdown')
 
 bot.polling(none_stop = True)
