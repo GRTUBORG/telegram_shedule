@@ -24,12 +24,15 @@ def send_help(message):
 def switch(message):
     t = datetime.datetime.now(datetime.timezone.utc) + delta
     nowtime = t.strftime("%x %X")
-    keyboard = types.ReplyKeyboardMarkup(row_width = 1, resize_keyboard = True)
-    route1_button = types.KeyboardButton(text = "Узнать расписание для маршрута №1")
-    route2_button = types.KeyboardButton(text = "Узнать расписание для маршрута №2")
-    keyboard.add(route1_button, route2_button)
-    bot.send_message(message.chat.id, f"Текущие дата и время: `{nowtime}`. Воспользуйся клавиатурой ниже, чтобы узнать расписание!", parse_mode = 'Markdown', reply_markup = keyboard)
-
+    nowtime_night = t.strftime("%X")
+    if nowtime_night > '22:00:00' or nowtime_night < '04:45:00':
+        bot.send_message(message.chat.id, f"Текущие дата и время: `{nowtime}`. К сожалению, ночных рейсов пока что нет. Просьба подождать до первого рейса (`5:30` утра). \nСпасибо за понимание!", parse_mode = 'Markdown')
+    else:
+        keyboard = types.ReplyKeyboardMarkup(row_width = 1, resize_keyboard = True)
+        route1_button = types.KeyboardButton(text = "Узнать расписание для маршрута №1")
+        route2_button = types.KeyboardButton(text = "Узнать расписание для маршрута №2")
+        keyboard.add(route1_button, route2_button)
+        bot.send_message(message.chat.id, f"Текущие дата и время: `{nowtime}`. Воспользуйся клавиатурой ниже, чтобы узнать расписание!", parse_mode = 'Markdown', reply_markup = keyboard)
 
 call_data = ["stations_1", "stations_2", "back_stations1", "back_stations2"]
 @bot.message_handler(content_types = ['text'])
