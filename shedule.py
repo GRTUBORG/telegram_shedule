@@ -5,10 +5,10 @@ import os
 
 from telebot import types
 
-token = os.environ.get('bot_token')
-bot = telebot.TeleBot(str(token))
-delta = datetime.timedelta(hours = 3, minutes = 0)
 try:
+    token = os.environ.get('bot_token')
+    bot = telebot.TeleBot(str(token))
+    delta = datetime.timedelta(hours = 3, minutes = 0)
 	print('Бот работает!')
 	@bot.message_handler(commands = ['start'])
 	def send_welcome(message):
