@@ -66,7 +66,6 @@ def handle_loc(message):
     user_location_correct = (user_location_lat, user_location_lon)
     coordinates_stations_correct = (coordinates_stations[0], coordinates_stations[1])
     distance = haversine(user_location_correct, coordinates_stations_correct, unit = 'm')
-    print(distance)
     if int(distance) > 150:
         bot.send_message(message.chat.id, "Остановок в радиусе 150 м. от тебя, к сожалению, нет.")
     else:
