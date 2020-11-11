@@ -37,7 +37,7 @@ def switch(message):
 call_data = ["stations_1", "stations_2", "back_stations1", "back_stations2"]
 @bot.message_handler(content_types = ['text'])
 def stations_command_message(message):
-    global new_arrived_time, verification_time, get_previous_text
+    global new_arrived_time, verification_time
     if message.text == 'Узнать расписание для маршрута №1':
         current_time_moscow = datetime.datetime.now(datetime.timezone.utc) + delta
         nowtime = current_time_moscow.strftime("%X")
@@ -53,18 +53,6 @@ def stations_command_message(message):
         for arrived_time in route1_daycare:
             current_send = 1
             if arrived_time > nowtime: #Знак < - ушедшие рейсы, > - наоборот
-                keys = route1_daycare.get(arrived_time)
-                length = length - int(keys)
-                length = str(length)
-                data_loads_previous = json.load(open('./предыдущие_маршруты.json'))
-                data_previous = json.dumps(data_loads_previous)
-                json_data_previous = json.loads(data_previous)
-                route1_previous = json_data_previous["Маршрут №1"]
-                get_previous_routers = route1_previous.get(length)
-                if get_previous_routers == '22:00:00':
-                    get_previous_text = f'Предыдущий и последний на эти сутки рейс был в `{get_previous_routers}`'
-                else:
-                    get_previous_text = f'Предыдущий рейс был в `{get_previous_routers}`'
                 time_departed = arrived_time[:5].rsplit(':')
                 current_time_departed = datetime.timedelta(minutes = int(time_departed[1]))
                 nowtime = current_time_departed - times
@@ -78,7 +66,7 @@ def stations_command_message(message):
                 keyboard = types.InlineKeyboardMarkup()
                 callback_button = types.InlineKeyboardButton(text = "Показать остановки", callback_data = call_data[0]) #stations_1
                 keyboard.add(callback_button)
-                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной *(ост. «Кладбище» / д/с «Сказка»)* станции в `{new_arrived_time}`. До его отправления осталось `{verification_time}` мин. \n{get_previous_text}', parse_mode = 'Markdown', reply_markup = keyboard)
+                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной *(ост. «Кладбище» / д/с «Сказка»)* станции в `{new_arrived_time}`. До его отправления осталось `{verification_time}` мин.', parse_mode = 'Markdown', reply_markup = keyboard)
                 if current_send == 1:
                     break
     elif message.text == 'Узнать расписание для маршрута №2':
@@ -96,18 +84,6 @@ def stations_command_message(message):
         for arrived_time in route1_daycare:
             current_send = 1
             if arrived_time > nowtime: #Знак < - ушедшие рейсы, > - наоборот
-                keys = route1_daycare.get(arrived_time)
-                length = length - int(keys)
-                length = str(length)
-                data_loads_previous = json.load(open('./предыдущие_маршруты.json'))
-                data_previous = json.dumps(data_loads_previous)
-                json_data_previous = json.loads(data_previous)
-                route1_previous = json_data_previous["Маршрут №2"]
-                get_previous_routers = route1_previous.get(length)
-                if get_previous_routers == '22:00:00':
-                    get_previous_text = f'Предыдущий и последний на эти сутки рейс был в `{get_previous_routers}`'
-                else:
-                    get_previous_text = f'Предыдущий рейс был в `{get_previous_routers}`'
                 time_departed = arrived_time[:5].rsplit(':')
                 current_time_departed = datetime.timedelta(minutes = int(time_departed[1]))
                 nowtime = current_time_departed - times
@@ -121,7 +97,7 @@ def stations_command_message(message):
                 keyboard = types.InlineKeyboardMarkup()
                 callback_button = types.InlineKeyboardButton(text = "Показать остановки", callback_data = call_data[1])
                 keyboard.add(callback_button)
-                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной *(ул. Ивановская (Шоссейная) / ост. «Магазин №5»)* станции в `{new_arrived_time}`. До его отправления осталось `{verification_time}` мин. \n{get_previous_text}', parse_mode = 'Markdown', reply_markup = keyboard)
+                bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной *(ул. Ивановская (Шоссейная) / ост. «Магазин №5»)* станции в `{new_arrived_time}`. До его отправления осталось `{verification_time}` мин.', parse_mode = 'Markdown', reply_markup = keyboard)
                 if current_send == 1:
                     break
                 
@@ -136,12 +112,12 @@ def callback_inline(call):
             keyboard = types.InlineKeyboardMarkup()
             callback_button = types.InlineKeyboardButton(text = "Показать остановки", callback_data = "stations_1")
             keyboard.add(callback_button)
-            bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'Следующий автобус отправится с конечной *(ост. «Кладбище» / д/с «Сказка»)* станции в `{new_arrived_time}`. До его отправления осталось `{verification_time}` мин. \n{get_previous_text}', parse_mode = 'Markdown', reply_markup = keyboard)
+            bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'Следующий автобус отправится с конечной *(ост. «Кладбище» / д/с «Сказка»)* станции в `{new_arrived_time}`. До его отправления осталось `{verification_time}` мин.', parse_mode = 'Markdown', reply_markup = keyboard)
         elif call.data == call_data[3]:
             keyboard = types.InlineKeyboardMarkup()
             callback_button = types.InlineKeyboardButton(text = "Показать остановки", callback_data = "stations_2")
             keyboard.add(callback_button)
-            bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'Следующий автобус отправится с конечной *(ост. «Кладбище» / д/с «Сказка»)* станции в `{new_arrived_time}`. До его отправления осталось `{verification_time}` мин. \n{get_previous_text}', parse_mode = 'Markdown', reply_markup = keyboard)
+            bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'Следующий автобус отправится с конечной *(ост. «Кладбище» / д/с «Сказка»)* станции в `{new_arrived_time}`. До его отправления осталось `{verification_time}` мин.', parse_mode = 'Markdown', reply_markup = keyboard)
         elif call.data == "stations_1":
             data_loads = json.load(open('./остановки.json'))
             data = json.dumps(data_loads)
