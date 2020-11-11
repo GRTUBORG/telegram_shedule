@@ -19,7 +19,7 @@ def send_welcome(message):
 
 @bot.message_handler(commands = ['help'])
 def send_help(message):
-	bot.reply_to(message, "Привет! Рад, что ты заглянул)а) сюда :) \nПросто используй команду \n/schedule! \nТакже будем очень благодарны за поддержку проекта: /donations.")
+	bot.reply_to(message, "Привет! Рад, что ты заглянул(а) сюда :) \nПросто используй команду \n/schedule! \nТакже будем очень благодарны за поддержку проекта: /donations.")
 
 @bot.message_handler(commands = ['schedule'])
 def switch(message):
