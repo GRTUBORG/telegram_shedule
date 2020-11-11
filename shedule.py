@@ -5,6 +5,8 @@ import os
 import time
 
 from telebot import types
+from haversine import haversine, Unit
+
 
 token = os.environ.get('bot_token')
 bot = telebot.TeleBot(str(token))
