@@ -2,6 +2,7 @@ import telebot
 import datetime
 import json
 import os
+import time
 
 from telebot import types
 
@@ -145,4 +146,10 @@ def callback_inline(call):
             keyboard.add(callback_button)
             bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'*Из мкр. Красные Сосенки:* \n{layout2}', parse_mode = 'Markdown', reply_markup = keyboard)
     
-bot.polling(none_stop = True)
+if __name__ == '__main__':
+    while True:
+        try:
+            bot.polling(none_stop=True)
+        except Exception as e:
+            time.sleep(3)
+            print(f'Возникла ошибка: {e}')
