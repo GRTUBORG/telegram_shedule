@@ -20,7 +20,7 @@ def send_welcome(message):
     bot.reply_to(message, f'Привет! Текущее время: {nowtime}. Чтобы узнать расписание — пропиши команду (или нажми на неё) /schedule')
 @bot.message_handler(commands = ['help'])
 def send_help(message):
-    bot.reply_to(message, "Привет! Рад, что ты заглянул(а) сюда :) \nПросто используй команду \n/schedule! \nТакже будем очень благодарны за поддержку проекта: /donations.")
+    bot.reply_to(message, "Привет! Рад, что ты заглянул(а) сюда :) \n1) /schedule - узнать расписание; \n2) /info - расстояние до ближайшей остановки; \nТакже будем очень благодарны за поддержку проекта: /donations.")
 @bot.message_handler(commands = ['schedule'])
 def switch(message):
     t = datetime.datetime.now(datetime.timezone.utc) + delta
