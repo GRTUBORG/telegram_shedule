@@ -39,9 +39,10 @@ def switch(message):
 @bot.message_handler(commands = ['donations'])
 def donations(message):
     keyboard = types.InlineKeyboardMarkup(row_width = 1)
+    url_button_bank = types.InlineKeyboardButton(text = "Поддержать: Перевод с карты на карту", url = "https://securepayments.sberbank.ru/payment/merchants/p2p_transfer/index.html?_ga=2.34322209.1897604948.1605089593-1741886018.1604938142")
     url_button_qiwi = types.InlineKeyboardButton(text = "Поддержать: QIWI Кошелёк", url = "qiwi.com/n/OVERFLOW16")
     url_button_yandex = types.InlineKeyboardButton(text = "Поддержать: Яндекс.Деньги", url = "money.yandex.ru/to/410015133921329")
-    keyboard.add(url_button_qiwi, url_button_yandex)
+    keyboard.add(url_button_bank, url_button_qiwi, url_button_yandex)
     bot.send_message(message.chat.id, "Я надеюсь, что это бот тебе полезен, и очень буду признателен за поддержку нашего проекта!", reply_markup = keyboard)
         
 call_data = ["stations_1", "stations_2", "back_stations1", "back_stations2"]
