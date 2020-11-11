@@ -19,7 +19,7 @@ def send_welcome(message):
 
 @bot.message_handler(commands = ['help'])
 def send_help(message):
-	bot.reply_to(message, "Привет! Рад, что ты заглянул сюда :) \nПросто используй команду /schedule!")
+	bot.reply_to(message, "Привет! Рад, что ты заглянул)а) сюда :) \nПросто используй команду \n/schedule! \nТакже будем очень благодарны за поддержку проекта: /donations.")
 
 @bot.message_handler(commands = ['schedule'])
 def switch(message):
@@ -34,7 +34,13 @@ def switch(message):
         route2_button = types.KeyboardButton(text = "Узнать расписание для маршрута №2")
         keyboard.add(route1_button, route2_button)
         bot.send_message(message.chat.id, f"Текущие дата и время: `{nowtime}`. Воспользуйся клавиатурой ниже, чтобы узнать расписание!", parse_mode = 'Markdown', reply_markup = keyboard)
-
+@bot.message_handler(commands = ['donations'])
+def donations(message):
+    keyboard = types.InlineKeyboardMarkup()
+    url_button = types.InlineKeyboardButton(text = "Поддержать проект: QIWI Кошелёк", url = "qiwi.com/n/OVERFLOW16")
+    keyboard.add(url_button)
+    bot.send_message(message.chat.id, "Я надеюсь, что это бот тебе полезен, и очень буду признателен за поддержку нашего проекта!", reply_markup = keyboard)
+        
 call_data = ["stations_1", "stations_2", "back_stations1", "back_stations2"]
 @bot.message_handler(content_types = ['text'])
 def stations_command_message(message):
