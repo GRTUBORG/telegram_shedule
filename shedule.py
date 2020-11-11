@@ -18,11 +18,9 @@ def send_welcome(message):
     t = datetime.datetime.now(datetime.timezone.utc) + delta
     nowtime = t.strftime("%X")
     bot.reply_to(message, f'Привет! Текущее время: {nowtime}. Чтобы узнать расписание — пропиши команду (или нажми на неё) /schedule')
-
 @bot.message_handler(commands = ['help'])
 def send_help(message):
     bot.reply_to(message, "Привет! Рад, что ты заглянул(а) сюда :) \nПросто используй команду \n/schedule! \nТакже будем очень благодарны за поддержку проекта: /donations.")
-
 @bot.message_handler(commands = ['schedule'])
 def switch(message):
     t = datetime.datetime.now(datetime.timezone.utc) + delta
@@ -43,8 +41,44 @@ def donations(message):
     url_button_qiwi = types.InlineKeyboardButton(text = "Поддержать: QIWI Кошелёк", url = "qiwi.com/n/OVERFLOW16")
     url_button_yandex = types.InlineKeyboardButton(text = "Поддержать: Яндекс.Деньги", url = "money.yandex.ru/to/410015133921329")
     keyboard.add(url_button_bank, url_button_qiwi, url_button_yandex)
-    bot.send_message(message.chat.id, "Я надеюсь, что это бот тебе полезен, и очень буду признателен за поддержку нашего проекта!", reply_markup = keyboard)
-        
+    bot.send_message(message.chat.id, "Я надеюсь, что этот бот тебе полезен, и очень буду признателен за поддержку нашего проекта!", reply_markup = keyboard)
+@bot.message_handler(commands = ["info"])
+def geophone(message):
+    keyboard = types.ReplyKeyboardMarkup(row_width = 1, resize_keyboard = True)
+    button_geo = types.KeyboardButton(text = "Отправить местоположение", request_location = True)
+    keyboard.add(button_geo)
+    bot.send_message(message.chat.id, "Отправь мне своё местоположение, чтобы узнать список остановок поблизости.", reply_markup=keyboard)  
+@bot.message_handler(content_types = ['location'])
+def handle_loc(message):
+    user_location = [message.location.latitude, message.location.longitude]
+    user_location_lat = user_location[0]
+    user_location_lon = user_location[1]
+    data_loads_previous = json.load(open('./координаты_остановок.json'))
+    data_previous = json.dumps(data_loads_previous)
+    json_data_previous = json.loads(data_previous)
+    route1_previous = json_data_previous["Маршрут №1"]
+    key = 0
+    while key < 23:
+        key = str(key)
+        coordinates_stations = route1_previous.get(key)
+        key = int(key)
+        key += 1
+    user_location_correct = (user_location_lat, user_location_lon)
+    coordinates_stations_correct = (coordinates_stations[0], coordinates_stations[1])
+    distance = haversine(user_location_correct, coordinates_stations_correct, unit = 'm')
+    print(distance)
+    if int(distance) > 150:
+        bot.send_message(message.chat.id, "Остановок в радиусе 150 м. от тебя, к сожалению, нет.")
+    else:
+        data_loads = json.load(open('./остановки.json'))
+        data = json.dumps(data_loads)
+        json_data = json.loads(data)
+        route1_daycare = json_data["Маршрут №1"]
+        key = str(key)
+        route1_daycare_print = route1_daycare.get(key)
+        key = int(key)
+        bot.send_message(message.chat.id, f"Все остановки в радиусе 150 м. от тебя: {route1_daycare_print}")
+
 call_data = ["stations_1", "stations_2", "back_stations1", "back_stations2"]
 @bot.message_handler(content_types = ['text'])
 def stations_command_message(message):
