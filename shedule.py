@@ -19,7 +19,7 @@ def send_welcome(message):
 
 @bot.message_handler(commands = ['help'])
 def send_help(message):
-	bot.reply_to(message, "Привет! Рад, что ты заглянул(а) сюда :) \nПросто используй команду \n/schedule! \nТакже будем очень благодарны за поддержку проекта: /donations.")
+    bot.reply_to(message, "Привет! Рад, что ты заглянул(а) сюда :) \nПросто используй команду \n/schedule! \nТакже будем очень благодарны за поддержку проекта: /donations.")
 
 @bot.message_handler(commands = ['schedule'])
 def switch(message):
@@ -37,8 +37,8 @@ def switch(message):
 @bot.message_handler(commands = ['donations'])
 def donations(message):
     keyboard = types.InlineKeyboardMarkup()
-    url_button_qiwi = types.InlineKeyboardButton(text = "Поддержать проект: QIWI Кошелёк", url = "qiwi.com/n/OVERFLOW16")
-    url_button_yandex = types.InlineKeyboardButton(text = "Поддержать проект: Яндекс.Деньги", url = "money.yandex.ru/to/410015133921329")
+    url_button_qiwi = types.InlineKeyboardButton(text = "Поддержать: QIWI Кошелёк", url = "qiwi.com/n/OVERFLOW16")
+    url_button_yandex = types.InlineKeyboardButton(text = "Поддержать: Яндекс.Деньги", url = "money.yandex.ru/to/410015133921329")
     keyboard.add(url_button_qiwi, url_button_yandex)
     bot.send_message(message.chat.id, "Я надеюсь, что это бот тебе полезен, и очень буду признателен за поддержку нашего проекта!", reply_markup = keyboard)
         
