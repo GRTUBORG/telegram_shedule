@@ -38,7 +38,7 @@ def switch(message):
 call_data = ["stations_1", "stations_2", "back_stations1", "back_stations2"]
 @bot.message_handler(content_types = ['text'])
 def stations_command_message(message):
-    global new_arrived_time, verification_time, , get_previous_text
+    global new_arrived_time, verification_time, get_previous_text
     if message.text == 'Узнать расписание для маршрута №1':
         current_time_moscow = datetime.datetime.now(datetime.timezone.utc) + delta
         nowtime = current_time_moscow.strftime("%X")
