@@ -61,7 +61,7 @@ def stations_command_message(message):
                 data_previous = json.dumps(data_loads_previous)
                 json_data_previous = json.loads(data_previous)
                 route1_previous = json_data_previous["Маршрут №1"]
-                get_previous_routers = route1_previous.get(length)
+                get_previous_routers = route1_previous.get(length)[:5]
                 if get_previous_routers == '22:00:00':
                     get_previous_text = f'Предыдущий и последний на эти сутки рейс был в `{get_previous_routers}`'
                 else:
@@ -104,7 +104,7 @@ def stations_command_message(message):
                 data_previous = json.dumps(data_loads_previous)
                 json_data_previous = json.loads(data_previous)
                 route1_previous = json_data_previous["Маршрут №1"]
-                get_previous_routers = route1_previous.get(length)
+                get_previous_routers = route1_previous.get(length)[:5]
                 if get_previous_routers == '22:00:00':
                     get_previous_text = f'Предыдущий и последний на эти сутки рейс был в `{get_previous_routers}`'
                 else:
