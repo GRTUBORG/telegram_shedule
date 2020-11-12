@@ -54,17 +54,29 @@ def handle_loc(message):
     data_previous = json.dumps(data_loads_previous)
     json_data_previous = json.loads(data_previous)
     route1_previous = json_data_previous["Маршрут №1"]
-    key = 0
+    route2_previous = json_data_previous["Маршрут №2"]
+    key_1 = 0
+    key_2 = 0
     quantity = 0
-    while key < 23:
-        key = str(key)
-        coordinates_stations = route1_previous.get(key)
-        key = int(key)
-        key += 1
+    while key_1 < 23:
+        key_1 = str(key_1)
+        coordinates_stations_1 = route1_previous.get(key_1)
+        key_1 = int(key_1)
+        key_1 += 1
         user_location_correct = (message.location.latitude, message.location.longitude)
-        coordinates_stations_correct = (coordinates_stations[0], coordinates_stations[1])
-        distance = haversine(user_location_correct, coordinates_stations_correct, unit = 'm')
-        if int(distance) < 250:
+        coordinates_stations_correct_1 = (coordinates_stations_1[0], coordinates_stations_1[1])
+        distance1 = haversine(user_location_correct, coordinates_stations_correct_1, unit = 'm')
+        if int(distance1) < 250:
+            quantity += 1
+    while key_2 < 17:
+        key_2 = str(key_2)
+        coordinates_stations_2 = route2_previous.get(key_2)
+        key_2 = int(key_2)
+        key_2 += 1
+        user_location_correct = (message.location.latitude, message.location.longitude)
+        coordinates_stations_correct_2 = (coordinates_stations_2[0], coordinates_stations_2[1])
+        distance2 = haversine(user_location_correct, coordinates_stations_correct_2, unit = 'm')
+        if int(distance2) < 250:
             quantity += 1
     bot.send_message(message.from_user.id, f'Всего найдено остановок на расстоянии 250м от Вас: {quantity}.')
 
