@@ -39,7 +39,7 @@ def switch(message):
     if temperature == "-0":
         temperature = "0"
     t = datetime.datetime.now(datetime.timezone.utc) + delta
-    nowtime = t.strftime("%x %X")
+    nowtime = t.strftime("%d.%m.%Y, %X")
     nowtime_night = t.strftime("%X")
     if nowtime_night > '22:00:00' or nowtime_night < '04:45:00':
         bot.send_message(message.chat.id, f"На дворе: `{nowtime}`. \nВ Тейково *{temperature}°*. \n\nК сожалению, ночных рейсов пока что нет. Просьба подождать до первого рейса (`5:30` утра). \nСпасибо за понимание!", parse_mode = 'Markdown')
