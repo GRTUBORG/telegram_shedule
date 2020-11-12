@@ -171,7 +171,7 @@ def stations_command_message(message):
                     break
                 
     else:
-        bot.send_message(message.from_user.id, "Хм. Что-то я не припомню такой команды... Воспользуйся /help")
+        bot.send_message(message.from_user.id, "Хм. Что-то я не припомню такой команды... 🤷🏽‍♂️ \nВоспользуйся /help")
         print(message.from_user.username)
 	
 @bot.callback_query_handler(func = lambda call: True)
