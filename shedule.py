@@ -69,7 +69,7 @@ def handle_loc(message):
         distance = haversine(user_location_correct, coordinates_stations_correct, unit = 'm')
         if int(distance) < 250:
             quantity += 1
-    bot.send_message(message.from_user.id, f'В данный момент всего остановок рядом: {quantity} (на расстоянии 250 м).')
+    bot.send_message(message.from_user.id, f'От Вас на расстоянии 250м всего остановок: {quantity}.')
 
 call_data = ["stations_1", "stations_2", "back_stations1", "back_stations2"]
 @bot.message_handler(content_types = ['text'])
