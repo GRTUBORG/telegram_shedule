@@ -201,7 +201,7 @@ def callback_inline(call):
             keyboard = types.InlineKeyboardMarkup()
             callback_button = types.InlineKeyboardButton(text = "⬅️ Назад", callback_data = call_data[2])
             keyboard.add(callback_button)
-            bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'*Из мкр. Красные Сосенки:* \n{layout}', parse_mode = 'Markdown', reply_markup = keyboard)
+            bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'🏢 *Из мкр. Красные Сосенки:* \n{layout}', parse_mode = 'Markdown', reply_markup = keyboard)
         elif call.data == "stations_2":
             data_loads2 = json.load(open('./остановки.json'))
             data2 = json.dumps(data_loads2)
@@ -216,7 +216,7 @@ def callback_inline(call):
             keyboard = types.InlineKeyboardMarkup()
             callback_button = types.InlineKeyboardButton(text = "⬅️ Назад", callback_data = call_data[3])
             keyboard.add(callback_button)
-            bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'*Из мкр. Красные Сосенки:* \n{layout2}', parse_mode = 'Markdown', reply_markup = keyboard)
+            bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'🏢 *Из мкр. Красные Сосенки:* \n{layout2}', parse_mode = 'Markdown', reply_markup = keyboard)
     
 if __name__ == '__main__':
     while True:
