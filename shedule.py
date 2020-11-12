@@ -179,12 +179,12 @@ def callback_inline(call):
     if call.message:
         if call.data == call_data[2]:
             keyboard = types.InlineKeyboardMarkup()
-            callback_button = types.InlineKeyboardButton(text = "Показать остановки", callback_data = "stations_1")
+            callback_button = types.InlineKeyboardButton(text = "Показать остановки", callback_data = call_data[0])
             keyboard.add(callback_button)
             bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'Следующий автобус отправится с конечной *(ост. «Кладбище» / д/с «Сказка»)* станции в `{new_arrived_time}`. До его отправления осталось `{verification_time}` мин. \n{get_previous_text}', parse_mode = 'Markdown', reply_markup = keyboard)
         elif call.data == call_data[3]:
             keyboard = types.InlineKeyboardMarkup()
-            callback_button = types.InlineKeyboardButton(text = "Показать остановки", callback_data = "stations_2")
+            callback_button = types.InlineKeyboardButton(text = "Показать остановки", callback_data = call_data[1])
             keyboard.add(callback_button)
             bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'Следующий автобус отправится с конечной *(ост. «Кладбище» / д/с «Сказка»)* станции в `{new_arrived_time}`. До его отправления осталось `{verification_time}` мин. \n{get_previous_text}', parse_mode = 'Markdown', reply_markup = keyboard)
         elif call.data == "stations_1":
