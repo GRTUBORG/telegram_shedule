@@ -46,13 +46,12 @@ def switch(message):
     route1_button = types.KeyboardButton(text = "Узнать расписание для маршрута №1")
     route2_button = types.KeyboardButton(text = "Узнать расписание для маршрута №2")
     callback_button = types.KeyboardButton(text = "⬅️ В главное меню")
-    feedback_button = types.KeyboardButton(text = "Связаться")
     donations_button = types.KeyboardButton(text = "Поддержать проект")
     if nowtime_night > '22:00:00' or nowtime_night < '04:45:00':
-        keyboard.add(callback_button, feedback_button, donations_button)
+        keyboard.add(callback_button, donations_button)
         bot.send_message(message.chat.id, f"*Главное меню* \n\nНа дворе: `{nowtime}`. \nВ Тейково *{temperature}°*. \n\nК сожалению, ночных рейсов пока что нет. Просьба подождать до первого рейса (`5:30` утра). \nСпасибо за понимание!", parse_mode = 'Markdown', reply_markup = keyboard)
     else:
-        keyboard.add(route1_button, route2_button, callback_button, feedback_button, donations_button)
+        keyboard.add(route1_button, route2_button, callback_button, donations_button)
         bot.send_message(message.chat.id, f"*Главное меню* \n\nНа дворе: `{nowtime}`. \nВ Тейково *{temperature}°*. \n\nВоспользуйся клавиатурой ниже, чтобы использовать функции бота!", parse_mode = 'Markdown', reply_markup = keyboard)
 @bot.message_handler(commands = ['donations'])
 def donations(message):
@@ -206,13 +205,12 @@ def stations_command_message(message):
         route1_button = types.KeyboardButton(text = "Узнать расписание для маршрута №1")
         route2_button = types.KeyboardButton(text = "Узнать расписание для маршрута №2")
         callback_button = types.KeyboardButton(text = "⬅️ В главное меню")
-        feedback_button = types.KeyboardButton(text = "Связаться")
         donations_button = types.KeyboardButton(text = "Поддержать проект")
         if nowtime_night > '22:00:00' or nowtime_night < '04:45:00':
-            keyboard.add(callback_button, feedback_button, donations_button)
+            keyboard.add(callback_button, donations_button)
             bot.send_message(message.chat.id, f"*Главное меню* \n\nНа дворе: `{nowtime}`. \nВ Тейково *{temperature}°*. \n\nК сожалению, ночных рейсов пока что нет. Просьба подождать до первого рейса (`5:30` утра). \nСпасибо за понимание!", parse_mode = 'Markdown', reply_markup = keyboard)
         else:
-            keyboard.add(route1_button, route2_button, callback_button, feedback_button, donations_button)
+            keyboard.add(route1_button, route2_button, callback_button, donations_button)
             bot.send_message(message.chat.id, f"*Главное меню* \n\nНа дворе: `{nowtime}`. \nВ Тейково *{temperature}°*. \n\nВоспользуйся клавиатурой ниже, чтобы использовать функции бота!", parse_mode = 'Markdown', reply_markup = keyboard)              
     elif message.text == "Поддержать проект":
         keyboard = types.InlineKeyboardMarkup(row_width = 1)
