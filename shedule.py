@@ -22,6 +22,7 @@ call_data = ["stations_1", "stations_2", "back_stations1", "back_stations2"]
 def send_welcome(message):
     t = datetime.datetime.now(datetime.timezone.utc) + delta
     nowtime = t.strftime("%X")
+    bot.send_message(655041562, 'У тебя +1 новый пользователь!')
     bot.reply_to(message, f'Привет! Текущее время: {nowtime}. Чтобы узнать расписание — пропиши команду (или нажми на неё) /schedule')
 @bot.message_handler(commands = ['help'])
 def send_help(message):
