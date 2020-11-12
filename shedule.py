@@ -67,7 +67,6 @@ def handle_loc(message):
         user_location_correct = (user_location_lat, user_location_lon)
         coordinates_stations_correct = (coordinates_stations[0], coordinates_stations[1])
         distance = haversine(user_location_correct, coordinates_stations_correct, unit = 'm')
-        print(distance)
         if int(distance) < 250:
             quantity += 1
     bot.send_message(message.from_user.id, f'В данный момент всего остановок рядом: {quantity} (на расстоянии 250 м).')
