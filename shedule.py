@@ -187,7 +187,7 @@ def callback_inline(call):
             callback_button = types.InlineKeyboardButton(text = "Показать остановки", callback_data = call_data[1])
             keyboard.add(callback_button)
             bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'Следующий автобус отправится с конечной *(ост. «Кладбище» / д/с «Сказка»)* станции в `{new_arrived_time}`. До его отправления осталось `{verification_time}` мин. \n{get_previous_text}', parse_mode = 'Markdown', reply_markup = keyboard)
-        elif call.data == "stations_1":
+        elif call.data == call_data[0]:
             data_loads = json.load(open('./остановки.json'))
             data = json.dumps(data_loads)
             json_data = json.loads(data)
@@ -202,7 +202,7 @@ def callback_inline(call):
             callback_button = types.InlineKeyboardButton(text = "⬅️ Назад", callback_data = call_data[2])
             keyboard.add(callback_button)
             bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'🏢 *Из мкр. Красные Сосенки:* \n{layout}', parse_mode = 'Markdown', reply_markup = keyboard)
-        elif call.data == "stations_2":
+        elif call.data == call_data[1]:
             data_loads2 = json.load(open('./остановки.json'))
             data2 = json.dumps(data_loads2)
             json_data2 = json.loads(data2)
