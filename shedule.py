@@ -221,35 +221,11 @@ def stations_command_message(message):
         keyboard.add(url_button_qiwi, url_button_yandex)
         bot.send_message(message.chat.id, "Я надеюсь, что этот бот тебе полезен, и очень буду признателен за поддержку нашего проекта! 😊", reply_markup = keyboard)
     elif message.text == "Ближайшие остановки":
-        data_loads_previous = json.load(open('./координаты_остановок.json'))
-        data_previous = json.dumps(data_loads_previous)
-        json_data_previous = json.loads(data_previous)
-        route1_previous = json_data_previous["Маршрут №1"]
-        route2_previous = json_data_previous["Маршрут №2"]
-        key_1 = 0
-        key_2 = 0
-        quantity = 0
-        while key_1 < 23:
-            key_1 = str(key_1)
-            coordinates_stations_1 = route1_previous.get(key_1)
-            key_1 = int(key_1)
-            key_1 += 1
-            user_location_correct = (message.location.latitude, message.location.longitude)
-            coordinates_stations_correct_1 = (coordinates_stations_1[0], coordinates_stations_1[1])
-            distance1 = haversine(user_location_correct, coordinates_stations_correct_1, unit = 'm')
-            if int(distance1) < 250:
-                quantity += 1
-        while key_2 < 17:
-            key_2 = str(key_2)
-            coordinates_stations_2 = route2_previous.get(key_2)
-            key_2 = int(key_2)
-            key_2 += 1
-            user_location_correct = (message.location.latitude, message.location.longitude)
-            coordinates_stations_correct_2 = (coordinates_stations_2[0], coordinates_stations_2[1])
-            distance2 = haversine(user_location_correct, coordinates_stations_correct_2, unit = 'm')
-            if int(distance2) < 250:
-                quantity += 1
-        bot.send_message(message.from_user.id, f'Всего найдено остановок на расстоянии 250м от Вас: {quantity}.')
+        keyboard = types.ReplyKeyboardMarkup(row_width = 1, resize_keyboard = True)
+        button_geo = types.KeyboardButton(text = "Отправить местоположение", request_location = True)
+        callback_button = types.KeyboardButton(text = "⬅️ В главное меню")
+        keyboard.add(button_geo, callback_button)
+        bot.send_message(message.chat.id, "Отправь мне своё местоположение, чтобы узнать список остановок поблизости.", reply_markup = keyboard) 
     else:
         bot.send_message(message.from_user.id, "Хм. Что-то я не припомню такой команды... 🤷🏽‍♂️ \nВоспользуйся /help")
         print(message.from_user.username)
