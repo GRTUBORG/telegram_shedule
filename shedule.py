@@ -34,7 +34,7 @@ def switch(message):
         route1_button = types.KeyboardButton(text = "Узнать расписание для маршрута №1")
         route2_button = types.KeyboardButton(text = "Узнать расписание для маршрута №2")
         keyboard.add(route1_button, route2_button)
-        bot.send_message(message.chat.id, f"Текущие дата и время: `{nowtime}`. Воспользуйся клавиатурой ниже, чтобы узнать расписание!", parse_mode = 'Markdown', reply_markup = keyboard)
+        bot.send_message(message.chat.id, f"Текущие дата и время: `{nowtime}`. Воспользуйся клавиатурой ниже, чтобы узнать расписание! \nНу, или же введи команду /help, чтобы узнать о других возможностях бота.", parse_mode = 'Markdown', reply_markup = keyboard)
 @bot.message_handler(commands = ['donations'])
 def donations(message):
     keyboard = types.InlineKeyboardMarkup(row_width = 1)
