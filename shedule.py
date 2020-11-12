@@ -194,9 +194,11 @@ def callback_inline(call):
             json_data = json.loads(data)
             route1_daycare = json_data["Маршрут №1"]
             layout = ''
+            key = 0
             for station_1 in route1_daycare:
-                station_1_true = station_1.replace('  ', '\n')
-                layout += station_1_true
+                station_1_true = route1_daycare.get(str(key))
+                key += 1
+                layout += f'{station_1_true}\n'
             keyboard = types.InlineKeyboardMarkup()
             callback_button = types.InlineKeyboardButton(text = "« Назад", callback_data = call_data[2])
             keyboard.add(callback_button)
@@ -207,9 +209,11 @@ def callback_inline(call):
             json_data2 = json.loads(data2)
             route2_daycare = json_data2["Маршрут №2"]
             layout2 = ''
+            key = 0
             for station_2 in route2_daycare:
-                station_2_true = station_2.replace('  ', '\n')
-                layout2 += station_2_true
+                station_2_true = route2_daycare.get(str(key))
+                key += 1
+                layout2 += f'{station_2_true}\n'
             keyboard = types.InlineKeyboardMarkup()
             callback_button = types.InlineKeyboardButton(text = "« Назад", callback_data = call_data[3])
             keyboard.add(callback_button)
