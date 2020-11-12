@@ -12,6 +12,7 @@ token = os.environ.get('bot_token')
 bot = telebot.TeleBot(str(token))
 print('Бот работает!')
 delta = datetime.timedelta(hours = 3, minutes = 0)
+call_data = ["stations_1", "stations_2", "back_stations1", "back_stations2"]
 
 @bot.message_handler(commands = ['start'])
 def send_welcome(message):
@@ -78,8 +79,6 @@ def handle_loc(message):
         if int(distance2) < 250:
             quantity += 1
     bot.send_message(message.from_user.id, f'Всего найдено остановок на расстоянии 250м от Вас: {quantity}.')
-
-call_data = ["stations_1", "stations_2", "back_stations1", "back_stations2"]
 @bot.message_handler(content_types = ['text'])
 def stations_command_message(message):
     global new_arrived_time, verification_time, get_previous_text
@@ -168,12 +167,10 @@ def stations_command_message(message):
                 keyboard.add(callback_button)
                 bot.send_message(message.from_user.id, f'Следующий автобус отправится с конечной *(ул. Ивановская (Шоссейная) / ост. «Магазин №5»)* станции в `{new_arrived_time}`. До его отправления осталось `{verification_time}` мин. \n{get_previous_text}', parse_mode = 'Markdown', reply_markup = keyboard)
                 if current_send == 1:
-                    break
-                
+                    break        
     else:
         bot.send_message(message.from_user.id, "Хм. Что-то я не припомню такой команды... 🤷🏽‍♂️ \nВоспользуйся /help")
         print(message.from_user.username)
-	
 @bot.callback_query_handler(func = lambda call: True)
 def callback_inline(call):
     if call.message:
@@ -217,7 +214,6 @@ def callback_inline(call):
             callback_button = types.InlineKeyboardButton(text = "⬅️ Назад", callback_data = call_data[3])
             keyboard.add(callback_button)
             bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'🏢 *Из мкр. Красные Сосенки:* \n{layout2}', parse_mode = 'Markdown', reply_markup = keyboard)
-    
 if __name__ == '__main__':
     while True:
         try:
