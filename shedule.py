@@ -50,9 +50,6 @@ def geophone(message):
     bot.send_message(message.chat.id, "Отправь мне своё местоположение, чтобы узнать список остановок поблизости.", reply_markup=keyboard)  
 @bot.message_handler(content_types = ['location'])
 def handle_loc(message):
-    user_location = [message.location.latitude, message.location.longitude]
-    user_location_lat = user_location[0]
-    user_location_lon = user_location[1]
     data_loads_previous = json.load(open('./координаты_остановок.json'))
     data_previous = json.dumps(data_loads_previous)
     json_data_previous = json.loads(data_previous)
@@ -64,7 +61,7 @@ def handle_loc(message):
         coordinates_stations = route1_previous.get(key)
         key = int(key)
         key += 1
-        user_location_correct = (user_location_lat, user_location_lon)
+        user_location_correct = (message.location.latitude, message.location.longitude)
         coordinates_stations_correct = (coordinates_stations[0], coordinates_stations[1])
         distance = haversine(user_location_correct, coordinates_stations_correct, unit = 'm')
         if int(distance) < 250:
