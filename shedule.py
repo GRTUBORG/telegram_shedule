@@ -6,6 +6,10 @@ import time
 
 from telebot import types
 from haversine import haversine, Unit
+from pyowm import OWM
+from pyowm.utils import config
+from pyowm.utils import timestamps
+from pyowm.utils.config import get_default_config
 
 
 token = os.environ.get('bot_token')
@@ -24,17 +28,27 @@ def send_help(message):
     bot.reply_to(message, "Привет! Рад, что ты заглянул(а) сюда :) \n1) /schedule - узнать расписание; \n2) /info - расстояние до ближайшей остановки; \n3) /back - возвращение в основное меню; \nТакже будем очень благодарны за поддержку проекта: /donations.")
 @bot.message_handler(commands = ['schedule', 'back'])
 def switch(message):
+    config_dict = get_default_config()
+    config_dict['language'] = 'ru'
+    owm = OWM('0d16f6ffb7d46c30c1202a765e2cb0fc', config_dict)
+    mgr = owm.weather_manager()
+    observation = mgr.weather_at_place('Тейково')
+    w = observation.weather
+    temp = w.temperature('celsius')['temp']
+    temperature = str(temp).rsplit(".")[0]
+    if temperature == "-0":
+        temperature = "0"
     t = datetime.datetime.now(datetime.timezone.utc) + delta
     nowtime = t.strftime("%x %X")
     nowtime_night = t.strftime("%X")
     if nowtime_night > '22:00:00' or nowtime_night < '04:45:00':
-        bot.send_message(message.chat.id, f"Текущие дата и время: `{nowtime}`. К сожалению, ночных рейсов пока что нет. Просьба подождать до первого рейса (`5:30` утра). \nСпасибо за понимание!", parse_mode = 'Markdown')
+        bot.send_message(message.chat.id, f"На дворе: `{nowtime}`. \nВ Тейково *{temperature}°*. \n\nК сожалению, ночных рейсов пока что нет. Просьба подождать до первого рейса (`5:30` утра). \nСпасибо за понимание!", parse_mode = 'Markdown')
     else:
         keyboard = types.ReplyKeyboardMarkup(row_width = 1, resize_keyboard = True)
         route1_button = types.KeyboardButton(text = "Узнать расписание для маршрута №1")
         route2_button = types.KeyboardButton(text = "Узнать расписание для маршрута №2")
         keyboard.add(route1_button, route2_button)
-        bot.send_message(message.chat.id, f"Текущие дата и время: `{nowtime}`. Воспользуйся клавиатурой ниже, чтобы узнать расписание! \nНу, или же введи команду /help, чтобы узнать о других возможностях бота.", parse_mode = 'Markdown', reply_markup = keyboard)
+        bot.send_message(message.chat.id, f"На дворе: `{nowtime}`. \nВ Тейково *{temperature}°*. \n\nВоспользуйся клавиатурой ниже, чтобы узнать расписание!", parse_mode = 'Markdown', reply_markup = keyboard)
 @bot.message_handler(commands = ['donations'])
 def donations(message):
     keyboard = types.InlineKeyboardMarkup(row_width = 1)
