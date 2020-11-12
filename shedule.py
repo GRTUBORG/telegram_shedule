@@ -58,25 +58,19 @@ def handle_loc(message):
     json_data_previous = json.loads(data_previous)
     route1_previous = json_data_previous["Маршрут №1"]
     key = 0
+    quantity = 0
     while key < 23:
         key = str(key)
         coordinates_stations = route1_previous.get(key)
         key = int(key)
         key += 1
-    user_location_correct = (user_location_lat, user_location_lon)
-    coordinates_stations_correct = (coordinates_stations[0], coordinates_stations[1])
-    distance = haversine(user_location_correct, coordinates_stations_correct, unit = 'm')
-    if int(distance) > 150:
-        bot.send_message(message.chat.id, "Остановок в радиусе 150 м. от тебя, к сожалению, нет.")
-    else:
-        data_loads = json.load(open('./остановки.json'))
-        data = json.dumps(data_loads)
-        json_data = json.loads(data)
-        route1_daycare = json_data["Маршрут №1"]
-        key = str(key)
-        route1_daycare_print = route1_daycare.get(key)
-        key = int(key)
-        bot.send_message(message.chat.id, f"Все остановки в радиусе 150 м. от тебя: {route1_daycare_print}")
+        user_location_correct = (user_location_lat, user_location_lon)
+        coordinates_stations_correct = (coordinates_stations[0], coordinates_stations[1])
+        distance = haversine(user_location_correct, coordinates_stations_correct, unit = 'm')
+        print(distance)
+        if int(distance) < 250:
+            quantity += 1
+    bot.send_message(message.from_user.id, f'В данный момент всего остановок рядом: {quantity} (на расстоянии 250 м).')
 
 call_data = ["stations_1", "stations_2", "back_stations1", "back_stations2"]
 @bot.message_handler(content_types = ['text'])
