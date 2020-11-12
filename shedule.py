@@ -214,6 +214,12 @@ def stations_command_message(message):
         else:
             keyboard.add(route1_button, route2_button, callback_button, feedback_button, donations_button)
             bot.send_message(message.chat.id, f"*Главное меню* \n\nНа дворе: `{nowtime}`. \nВ Тейково *{temperature}°*. \n\nВоспользуйся клавиатурой ниже, чтобы использовать функции бота!", parse_mode = 'Markdown', reply_markup = keyboard)              
+    elif message.text == "Поддержать проект":
+        keyboard = types.InlineKeyboardMarkup(row_width = 1)
+        url_button_qiwi = types.InlineKeyboardButton(text = "Поддержать: QIWI Кошелёк", url = "qiwi.com/n/OVERFLOW16")
+        url_button_yandex = types.InlineKeyboardButton(text = "Поддержать: Яндекс.Деньги", url = "money.yandex.ru/to/410015133921329")
+        keyboard.add(url_button_qiwi, url_button_yandex)
+        bot.send_message(message.chat.id, "Я надеюсь, что этот бот тебе полезен, и очень буду признателен за поддержку нашего проекта! 😊", reply_markup = keyboard)
     else:
         bot.send_message(message.from_user.id, "Хм. Что-то я не припомню такой команды... 🤷🏽‍♂️ \nВоспользуйся /help")
         print(message.from_user.username)
