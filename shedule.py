@@ -21,7 +21,7 @@ def send_welcome(message):
 @bot.message_handler(commands = ['help'])
 def send_help(message):
     bot.reply_to(message, "Привет! Рад, что ты заглянул(а) сюда :) \n1) /schedule - узнать расписание; \n2) /info - расстояние до ближайшей остановки; \nТакже будем очень благодарны за поддержку проекта: /donations.")
-@bot.message_handler(commands = ['schedule'])
+@bot.message_handler(commands = ['schedule', 'back'])
 def switch(message):
     t = datetime.datetime.now(datetime.timezone.utc) + delta
     nowtime = t.strftime("%x %X")
