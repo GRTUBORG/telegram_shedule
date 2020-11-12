@@ -199,7 +199,7 @@ def callback_inline(call):
                 key += 1
                 layout += f'{station_1_true}\n'
             keyboard = types.InlineKeyboardMarkup()
-            callback_button = types.InlineKeyboardButton(text = "« Назад", callback_data = call_data[2])
+            callback_button = types.InlineKeyboardButton(text = "⬅️ Назад", callback_data = call_data[2])
             keyboard.add(callback_button)
             bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'*Из мкр. Красные Сосенки:* \n{layout}', parse_mode = 'Markdown', reply_markup = keyboard)
         elif call.data == "stations_2":
@@ -214,7 +214,7 @@ def callback_inline(call):
                 key += 1
                 layout2 += f'{station_2_true}\n'
             keyboard = types.InlineKeyboardMarkup()
-            callback_button = types.InlineKeyboardButton(text = "« Назад", callback_data = call_data[3])
+            callback_button = types.InlineKeyboardButton(text = "⬅️ Назад", callback_data = call_data[3])
             keyboard.add(callback_button)
             bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'*Из мкр. Красные Сосенки:* \n{layout2}', parse_mode = 'Markdown', reply_markup = keyboard)
     
