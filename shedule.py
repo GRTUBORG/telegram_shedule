@@ -47,7 +47,8 @@ def switch(message):
         keyboard = types.ReplyKeyboardMarkup(row_width = 1, resize_keyboard = True)
         route1_button = types.KeyboardButton(text = "Узнать расписание для маршрута №1")
         route2_button = types.KeyboardButton(text = "Узнать расписание для маршрута №2")
-        keyboard.add(route1_button, route2_button)
+        callback_button = types.KeyboardButton(text = "⬅️ В главное меню")
+        keyboard.add(route1_button, route2_button, callback_button)
         bot.send_message(message.chat.id, f"*Главное меню* \n\nНа дворе: `{nowtime}`. \nВ Тейково *{temperature}°*. \n\nВоспользуйся клавиатурой ниже, чтобы использовать функции бота!", parse_mode = 'Markdown', reply_markup = keyboard)
 @bot.message_handler(commands = ['donations'])
 def donations(message):
@@ -203,7 +204,8 @@ def stations_command_message(message):
             keyboard = types.ReplyKeyboardMarkup(row_width = 1, resize_keyboard = True)
             route1_button = types.KeyboardButton(text = "Узнать расписание для маршрута №1")
             route2_button = types.KeyboardButton(text = "Узнать расписание для маршрута №2")
-            keyboard.add(route1_button, route2_button)
+            callback_button = types.KeyboardButton(text = "⬅️ В главное меню")
+            keyboard.add(route1_button, route2_button, callback_button)
             bot.send_message(message.chat.id, f"*Главное меню* \n\nНа дворе: `{nowtime}`. \nВ Тейково *{temperature}°*. \n\nВоспользуйся клавиатурой ниже, чтобы использовать функции бота!", parse_mode = 'Markdown', reply_markup = keyboard)               
     else:
         bot.send_message(message.from_user.id, "Хм. Что-то я не припомню такой команды... 🤷🏽‍♂️ \nВоспользуйся /help")
