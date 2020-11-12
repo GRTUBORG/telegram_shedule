@@ -40,7 +40,7 @@ def donations(message):
     url_button_qiwi = types.InlineKeyboardButton(text = "Поддержать: QIWI Кошелёк", url = "qiwi.com/n/OVERFLOW16")
     url_button_yandex = types.InlineKeyboardButton(text = "Поддержать: Яндекс.Деньги", url = "money.yandex.ru/to/410015133921329")
     keyboard.add(url_button_qiwi, url_button_yandex)
-    bot.send_message(message.chat.id, "Я надеюсь, что этот бот тебе полезен, и очень буду признателен за поддержку нашего проекта!", reply_markup = keyboard)
+    bot.send_message(message.chat.id, "Я надеюсь, что этот бот тебе полезен, и очень буду признателен за поддержку нашего проекта! 😊", reply_markup = keyboard)
 @bot.message_handler(commands = ["info"])
 def geophone(message):
     keyboard = types.ReplyKeyboardMarkup(row_width = 1, resize_keyboard = True)
