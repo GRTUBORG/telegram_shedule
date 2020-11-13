@@ -127,7 +127,7 @@ def stations_command_message(message):
         data = json.dumps(data_loads)
         json_data = json.loads(data)
         route1_daycare = json_data["Маршрут №1"]
-        length = 43
+        length = 63
         for arrived_time in route1_daycare:
             current_send = 1
             if arrived_time > nowtime: #Знак < - ушедшие рейсы, > - наоборот
@@ -170,7 +170,7 @@ def stations_command_message(message):
         data = json.dumps(data_loads)
         json_data = json.loads(data)
         route1_daycare = json_data["Маршрут №2"]
-        length = 43
+        length = 63
         for arrived_time in route1_daycare:
             current_send = 1
             if arrived_time > nowtime: #Знак < - ушедшие рейсы, > - наоборот
