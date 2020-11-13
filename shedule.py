@@ -42,7 +42,7 @@ def switch(message):
     t = datetime.datetime.now(datetime.timezone.utc) + delta
     nowtime = t.strftime("%d.%m.%Y, %X")
     nowtime_night = t.strftime("%X")
-    keyboard = types.ReplyKeyboardMarkup(row_width = 1, resize_keyboard = True)
+    keyboard = types.ReplyKeyboardMarkup(row_width = 2, resize_keyboard = True)
     route1_button = types.KeyboardButton(text = "Маршрут №1")
     route2_button = types.KeyboardButton(text = "Маршрут №2")
     callback_button = types.KeyboardButton(text = "⬅️ В главное меню")
@@ -202,7 +202,7 @@ def stations_command_message(message):
         t = datetime.datetime.now(datetime.timezone.utc) + delta
         nowtime = t.strftime("%d.%m.%Y, %X")
         nowtime_night = t.strftime("%X")
-        keyboard = types.ReplyKeyboardMarkup(row_width = 1, resize_keyboard = True)
+        keyboard = types.ReplyKeyboardMarkup(row_width = 2, resize_keyboard = True)
         route1_button = types.KeyboardButton(text = "Маршрут №1")
         route2_button = types.KeyboardButton(text = "Маршрут №2")
         callback_button = types.KeyboardButton(text = "⬅️ В главное меню")
