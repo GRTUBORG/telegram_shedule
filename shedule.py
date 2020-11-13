@@ -109,7 +109,10 @@ def handle_loc(message):
         new_distance.sort()
     else:
         new_distance = distance_correct
-    bot.send_message(message.from_user.id, f'Всего найдено остановок на расстоянии 250м от Вас: {quantity}. \n*Ближайшая* находится в {new_distance[0]}м.', parse_mode = 'Markdown')
+    if new_distance == []:
+        bot.send_message(message.from_user.id, f'Упс, кажется, здесь нет остановок рядом, либо Вы указали неправильное местоположение.')
+    else:
+        bot.send_message(message.from_user.id, f'Всего найдено остановок на расстоянии 250м от Вас: {quantity}. \n*Ближайшая* находится в {new_distance[0]}м.', parse_mode = 'Markdown')
 @bot.message_handler(content_types = ['text'])
 def stations_command_message(message):
     global new_arrived_time, verification_time, get_previous_text
