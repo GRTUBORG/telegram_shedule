@@ -43,8 +43,8 @@ def switch(message):
     nowtime = t.strftime("%d.%m.%Y, %X")
     nowtime_night = t.strftime("%X")
     keyboard = types.ReplyKeyboardMarkup(row_width = 1, resize_keyboard = True)
-    route1_button = types.KeyboardButton(text = "Узнать расписание для маршрута №1")
-    route2_button = types.KeyboardButton(text = "Узнать расписание для маршрута №2")
+    route1_button = types.KeyboardButton(text = "Маршрут №1")
+    route2_button = types.KeyboardButton(text = "Маршрут №2")
     callback_button = types.KeyboardButton(text = "⬅️ В главное меню")
     stations_button = types.KeyboardButton(text = "Ближайшие остановки")
     donations_button = types.KeyboardButton(text = "Поддержать проект")
@@ -102,7 +102,7 @@ def handle_loc(message):
 @bot.message_handler(content_types = ['text'])
 def stations_command_message(message):
     global new_arrived_time, verification_time, get_previous_text
-    if message.text == 'Узнать расписание для маршрута №1':
+    if message.text == 'Маршрут №1':
         current_time_moscow = datetime.datetime.now(datetime.timezone.utc) + delta
         nowtime = current_time_moscow.strftime("%X")
         if nowtime > '22:00:00' or nowtime < '04:45:00':
@@ -145,7 +145,7 @@ def stations_command_message(message):
                 bot.send_message(message.from_user.id, f'*График движения для маршрута №1* \n\nСледующий автобус отправится с конечной *(ост. «Кладбище» / д/с «Сказка»)* станции в `{new_arrived_time}`. До его отправления осталось `{verification_time}` мин. \n{get_previous_text}', parse_mode = 'Markdown', reply_markup = keyboard)
                 if current_send == 1:
                     break
-    elif message.text == 'Узнать расписание для маршрута №2':
+    elif message.text == 'Маршрут №2':
         current_time_moscow = datetime.datetime.now(datetime.timezone.utc) + delta
         nowtime = current_time_moscow.strftime("%X")
         if nowtime > '22:00:00' or nowtime < '04:45:00':
@@ -203,8 +203,8 @@ def stations_command_message(message):
         nowtime = t.strftime("%d.%m.%Y, %X")
         nowtime_night = t.strftime("%X")
         keyboard = types.ReplyKeyboardMarkup(row_width = 1, resize_keyboard = True)
-        route1_button = types.KeyboardButton(text = "Узнать расписание для маршрута №1")
-        route2_button = types.KeyboardButton(text = "Узнать расписание для маршрута №2")
+        route1_button = types.KeyboardButton(text = "Маршрут №1")
+        route2_button = types.KeyboardButton(text = "Маршрут №2")
         callback_button = types.KeyboardButton(text = "⬅️ В главное меню")
         stations_button = types.KeyboardButton(text = "Ближайшие остановки")
         donations_button = types.KeyboardButton(text = "Поддержать проект")
