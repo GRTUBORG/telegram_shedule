@@ -78,7 +78,10 @@ def handle_loc(message):
     key_1 = 0
     key_2 = 0
     quantity = 0
-    while key_1 < 23:
+    distance_full_1 = []
+    distance_full_2 = []
+    new_distance = []
+    while key_1 < 24:
         key_1 = str(key_1)
         coordinates_stations_1 = route1_previous.get(key_1)
         key_1 = int(key_1)
@@ -88,7 +91,8 @@ def handle_loc(message):
         distance1 = haversine(user_location_correct, coordinates_stations_correct_1, unit = 'm')
         if int(distance1) < 250:
             quantity += 1
-    while key_2 < 17:
+            distance_full_1 += [int(distance1)]
+    while key_2 < 18:
         key_2 = str(key_2)
         coordinates_stations_2 = route2_previous.get(key_2)
         key_2 = int(key_2)
@@ -98,7 +102,14 @@ def handle_loc(message):
         distance2 = haversine(user_location_correct, coordinates_stations_correct_2, unit = 'm')
         if int(distance2) < 250:
             quantity += 1
-    bot.send_message(message.from_user.id, f'Всего найдено остановок на расстоянии 250м от Вас: {quantity}.')
+            distance_full_2 += [int(distance2)]
+    distance_correct = distance_full_1 + distance_full_2
+    if len(distance_correct) > 1:
+        new_distance = list(set(distance_correct))
+        new_distance.sort()
+    else:
+        new_distance = distance_correct
+    bot.send_message(message.from_user.id, f'Всего найдено остановок на расстоянии 250м от Вас: {quantity}. \n*Ближайшая* находится в {new_distance[0]}м.', parse_mode = 'Markdown')
 @bot.message_handler(content_types = ['text'])
 def stations_command_message(message):
     global new_arrived_time, verification_time, get_previous_text
