@@ -50,7 +50,7 @@ def switch(message):
     donations_button = types.KeyboardButton(text = "Поддержать проект")
     if nowtime_night > '22:00:00' or nowtime_night < '04:45:00':
         keyboard.add(stations_button, donations_button, callback_button)
-        bot.send_message(message.chat.id, f"*Главное меню* \n\nНа дворе: `{nowtime}`. \nВ Тейково *{temperature}°*. \n\nК сожалению, ночных рейсов пока что нет. Просьба подождать до первого рейса (`5:30` утра). \nСпасибо за понимание!", parse_mode = 'Markdown', reply_markup = keyboard)
+        bot.send_message(message.chat.id, f"*Главное меню* \n\nНа дворе: `{nowtime}`. \nВ Тейково *{temperature}°*. \n\nК сожалению, ночных рейсов пока что нет. Просьба подождать до первого рейса (`5:30` утра), а затем нажать «⬅️ В главное меню», либо же ввести команду /schedule. \nСпасибо за понимание!", parse_mode = 'Markdown', reply_markup = keyboard)
     else:
         keyboard.add(route1_button, route2_button, stations_button, donations_button, callback_button)
         bot.send_message(message.chat.id, f"*Главное меню* \n\nНа дворе: `{nowtime}`. \nВ Тейково *{temperature}°*. \n\nВоспользуйся клавиатурой ниже, чтобы использовать функции бота!", parse_mode = 'Markdown', reply_markup = keyboard)
