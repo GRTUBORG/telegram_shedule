@@ -24,8 +24,8 @@ def send_welcome(message):
     nowtime = t.strftime("%X")
     str_countes = ''
     countes = [f'{message.from_user.id} - ID,\n',
-               f'{message.from_user.first_name} - first name,\n',
-               f'{message.from_user.last_name}- last name,\n',
+               f'{message.from_user.first_name} - имя,\n',
+               f'{message.from_user.last_name} - фамилия,\n',
                f'{message.from_user.username} - username.'
               ]
     for x in countes:
