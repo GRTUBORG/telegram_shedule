@@ -7,16 +7,64 @@ import time
 from telebot import types
 from haversine import haversine, Unit
 from pyowm import OWM
-from pyowm.utils import config
-from pyowm.utils import timestamps
 from pyowm.utils.config import get_default_config
 
 
-token = os.environ.get('bot_token')
-bot = telebot.TeleBot(str(token))
+BOT_TOKEN = os.environ.get('BOT_TOKEN') or os.environ.get('bot_token')
+if not BOT_TOKEN:
+    raise RuntimeError("Не задан токен бота. Укажите BOT_TOKEN (или bot_token) в переменных окружения.")
+OWM_API_KEY = os.environ.get('OWM_API_KEY', '0d16f6ffb7d46c30c1202a765e2cb0fc')
+
+bot = telebot.TeleBot(str(BOT_TOKEN))
 print('Бот работает!')
 delta = datetime.timedelta(hours = 3, minutes = 0)
 call_data = ["stations_1", "stations_2", "back_stations1", "back_stations2"]
+
+def load_json(path):
+    with open(path, 'r', encoding = 'utf-8') as file:
+        return json.load(file)
+
+def get_current_temperature(config_dict):
+    owm = OWM(OWM_API_KEY, config_dict)
+    mgr = owm.weather_manager()
+    observation = mgr.weather_at_place('Тейково')
+    temp = observation.weather.temperature('celsius')['temp']
+    temperature = str(temp).rsplit(".")[0]
+    return "0" if temperature == "-0" else temperature
+
+def send_main_menu(message, show_routes):
+    t = datetime.datetime.now(datetime.timezone.utc) + delta
+    nowtime = t.strftime("%d.%m.%Y, %X")
+    keyboard = types.ReplyKeyboardMarkup(row_width = 2, resize_keyboard = True)
+    callback_button = types.KeyboardButton(text = "⬅️ В главное меню")
+    stations_button = types.KeyboardButton(text = "Ближайшие остановки")
+    donations_button = types.KeyboardButton(text = "Поддержать проект")
+
+    if show_routes:
+        route1_button = types.KeyboardButton(text = "Маршрут №1")
+        route2_button = types.KeyboardButton(text = "Маршрут №2")
+        keyboard.add(route1_button, route2_button, stations_button, donations_button, callback_button)
+        message_text = (
+            "*Главное меню* \n\nНа дворе: `{nowtime}`. \nВ Тейково *{temperature}°*. "
+            "\n\nВоспользуйся клавиатурой ниже, чтобы использовать функции бота!"
+        )
+    else:
+        keyboard.add(stations_button, donations_button, callback_button)
+        message_text = (
+            "*Главное меню* \n\nНа дворе: `{nowtime}`. \nВ Тейково *{temperature}°*. "
+            "\n\nК сожалению, ночных рейсов пока что нет. Просьба подождать до первого рейса (`5:30` утра), "
+            "а затем нажать «⬅️ В главное меню», либо же ввести команду /schedule. \nСпасибо за понимание!"
+        )
+
+    config_dict = get_default_config()
+    config_dict['language'] = 'ru'
+    temperature = get_current_temperature(config_dict)
+    bot.send_message(
+        message.chat.id,
+        message_text.format(nowtime = nowtime, temperature = temperature),
+        parse_mode = 'Markdown',
+        reply_markup = keyboard
+    )
 
 @bot.message_handler(commands = ['start'])
 def send_welcome(message):
@@ -37,31 +85,10 @@ def send_help(message):
     bot.reply_to(message, "Привет! Рад, что ты заглянул(а) сюда :) \n1) /schedule - узнать расписание; \n2) /info - расстояние до ближайшей остановки; \n3) /back - возвращение в основное меню; \nТакже будем очень благодарны за поддержку проекта: /donations.")
 @bot.message_handler(commands = ['schedule', 'back'])
 def switch(message):
-    config_dict = get_default_config()
-    config_dict['language'] = 'ru'
-    owm = OWM('0d16f6ffb7d46c30c1202a765e2cb0fc', config_dict)
-    mgr = owm.weather_manager()
-    observation = mgr.weather_at_place('Тейково')
-    w = observation.weather
-    temp = w.temperature('celsius')['temp']
-    temperature = str(temp).rsplit(".")[0]
-    if temperature == "-0":
-        temperature = "0"
     t = datetime.datetime.now(datetime.timezone.utc) + delta
-    nowtime = t.strftime("%d.%m.%Y, %X")
     nowtime_night = t.strftime("%X")
-    keyboard = types.ReplyKeyboardMarkup(row_width = 2, resize_keyboard = True)
-    route1_button = types.KeyboardButton(text = "Маршрут №1")
-    route2_button = types.KeyboardButton(text = "Маршрут №2")
-    callback_button = types.KeyboardButton(text = "⬅️ В главное меню")
-    stations_button = types.KeyboardButton(text = "Ближайшие остановки")
-    donations_button = types.KeyboardButton(text = "Поддержать проект")
-    if nowtime_night > '22:00:00' or nowtime_night < '04:45:00':
-        keyboard.add(stations_button, donations_button, callback_button)
-        bot.send_message(message.chat.id, f"*Главное меню* \n\nНа дворе: `{nowtime}`. \nВ Тейково *{temperature}°*. \n\nК сожалению, ночных рейсов пока что нет. Просьба подождать до первого рейса (`5:30` утра), а затем нажать «⬅️ В главное меню», либо же ввести команду /schedule. \nСпасибо за понимание!", parse_mode = 'Markdown', reply_markup = keyboard)
-    else:
-        keyboard.add(route1_button, route2_button, stations_button, donations_button, callback_button)
-        bot.send_message(message.chat.id, f"*Главное меню* \n\nНа дворе: `{nowtime}`. \nВ Тейково *{temperature}°*. \n\nВоспользуйся клавиатурой ниже, чтобы использовать функции бота!", parse_mode = 'Markdown', reply_markup = keyboard)
+    is_night = nowtime_night > '22:00:00' or nowtime_night < '04:45:00'
+    send_main_menu(message, show_routes = not is_night)
 @bot.message_handler(commands = ['donations'])
 def donations(message):
     keyboard = types.InlineKeyboardMarkup(row_width = 1)
@@ -78,9 +105,7 @@ def geophone(message):
     bot.send_message(message.chat.id, "Отправь мне своё местоположение, чтобы узнать список остановок поблизости.", reply_markup = keyboard)  
 @bot.message_handler(content_types = ['location'])
 def handle_loc(message):
-    data_loads_previous = json.load(open('./координаты_остановок.json'))
-    data_previous = json.dumps(data_loads_previous)
-    json_data_previous = json.loads(data_previous)
+    json_data_previous = load_json('./координаты_остановок.json')
     route1_previous = json_data_previous["Маршрут №1"]
     route2_previous = json_data_previous["Маршрут №2"]
     key_1 = 0
@@ -131,9 +156,7 @@ def stations_command_message(message):
             return bot.send_message(message.from_user.id, "Увы, но следующий рейс будет только в 5:30 утра. Просьба подождать!")
         times = nowtime[:5].rsplit(':')
         times = datetime.timedelta(minutes = int(times[1]))
-        data_loads = json.load(open('./расписание.json'))
-        data = json.dumps(data_loads)
-        json_data = json.loads(data)
+        json_data = load_json('./расписание.json')
         route1_daycare = json_data["Маршрут №1"]
         length = 63
         for arrived_time in route1_daycare:
@@ -142,9 +165,7 @@ def stations_command_message(message):
                 keys = route1_daycare.get(arrived_time)
                 length = length - int(keys) + 1
                 length = str(length)
-                data_loads_previous = json.load(open('./предыдущие_маршруты.json'))
-                data_previous = json.dumps(data_loads_previous)
-                json_data_previous = json.loads(data_previous)
+                json_data_previous = load_json('./предыдущие_маршруты.json')
                 route1_previous = json_data_previous["Маршрут №1"]
                 get_previous_routers = route1_previous.get(length)[:5]
                 if get_previous_routers == '22:00:00':
@@ -174,9 +195,7 @@ def stations_command_message(message):
             return bot.send_message(message.from_user.id, "Увы, но следующий рейс будет только в 5:30 утра. Просьба подождать!")
         times = nowtime[:5].rsplit(':')
         times = datetime.timedelta(minutes = int(times[1]))
-        data_loads = json.load(open('./расписание.json'))
-        data = json.dumps(data_loads)
-        json_data = json.loads(data)
+        json_data = load_json('./расписание.json')
         route1_daycare = json_data["Маршрут №2"]
         length = 63
         for arrived_time in route1_daycare:
@@ -185,10 +204,8 @@ def stations_command_message(message):
                 keys = route1_daycare.get(arrived_time)
                 length = length - int(keys) + 1
                 length = str(length)
-                data_loads_previous = json.load(open('./предыдущие_маршруты.json'))
-                data_previous = json.dumps(data_loads_previous)
-                json_data_previous = json.loads(data_previous)
-                route1_previous = json_data_previous["Маршрут №1"]
+                json_data_previous = load_json('./предыдущие_маршруты.json')
+                route1_previous = json_data_previous["Маршрут №2"]
                 get_previous_routers = route1_previous.get(length)[:5]
                 if get_previous_routers == '22:00:00':
                     get_previous_text = f'Предыдущий и последний на эти сутки рейс был в `{get_previous_routers}`'
@@ -211,31 +228,10 @@ def stations_command_message(message):
                 if current_send == 1:
                     break 
     elif message.text == "⬅️ В главное меню" :
-        config_dict = get_default_config()
-        config_dict['language'] = 'ru'
-        owm = OWM('0d16f6ffb7d46c30c1202a765e2cb0fc', config_dict)
-        mgr = owm.weather_manager()
-        observation = mgr.weather_at_place('Тейково')
-        w = observation.weather
-        temp = w.temperature('celsius')['temp']
-        temperature = str(temp).rsplit(".")[0]
-        if temperature == "-0":
-            temperature = "0"
         t = datetime.datetime.now(datetime.timezone.utc) + delta
-        nowtime = t.strftime("%d.%m.%Y, %X")
         nowtime_night = t.strftime("%X")
-        keyboard = types.ReplyKeyboardMarkup(row_width = 2, resize_keyboard = True)
-        route1_button = types.KeyboardButton(text = "Маршрут №1")
-        route2_button = types.KeyboardButton(text = "Маршрут №2")
-        callback_button = types.KeyboardButton(text = "⬅️ В главное меню")
-        stations_button = types.KeyboardButton(text = "Ближайшие остановки")
-        donations_button = types.KeyboardButton(text = "Поддержать проект")
-        if nowtime_night > '22:00:00' or nowtime_night < '04:45:00':
-            keyboard.add(stations_button, donations_button, callback_button)
-            bot.send_message(message.chat.id, f"*Главное меню* \n\nНа дворе: `{nowtime}`. \nВ Тейково *{temperature}°*. \n\nК сожалению, ночных рейсов пока что нет. Просьба подождать до первого рейса (`5:30` утра). \nСпасибо за понимание!", parse_mode = 'Markdown', reply_markup = keyboard)
-        else:
-            keyboard.add(route1_button, route2_button, stations_button, donations_button, callback_button)
-            bot.send_message(message.chat.id, f"*Главное меню* \n\nНа дворе: `{nowtime}`. \nВ Тейково *{temperature}°*. \n\nВоспользуйся клавиатурой ниже, чтобы использовать функции бота!", parse_mode = 'Markdown', reply_markup = keyboard)              
+        is_night = nowtime_night > '22:00:00' or nowtime_night < '04:45:00'
+        send_main_menu(message, show_routes = not is_night)
     elif message.text == "Поддержать проект":
         keyboard = types.InlineKeyboardMarkup(row_width = 1)
         url_button_qiwi = types.InlineKeyboardButton(text = "Поддержать: QIWI Кошелёк", url = "qiwi.com/n/OVERFLOW16")
@@ -265,9 +261,7 @@ def callback_inline(call):
             keyboard.add(callback_button)
             bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'*График движения для маршрута №2* \n\nСледующий автобус отправится с конечной *(ул. Ивановская (Шоссейная) / ост. «Магазин №5»)* станции в `{new_arrived_time}`. До его отправления осталось `{verification_time}` мин. \n{get_previous_text}', parse_mode = 'Markdown', reply_markup = keyboard)
         elif call.data == call_data[0]:
-            data_loads = json.load(open('./остановки.json'))
-            data = json.dumps(data_loads)
-            json_data = json.loads(data)
+            json_data = load_json('./остановки.json')
             route1_daycare = json_data["Маршрут №1"]
             layout = ''
             key = 0
@@ -280,9 +274,7 @@ def callback_inline(call):
             keyboard.add(callback_button)
             bot.edit_message_text(chat_id = call.message.chat.id, message_id = call.message.message_id, text = f'🏢 *Из мкр. Красные Сосенки:* \n\n{layout}', parse_mode = 'Markdown', reply_markup = keyboard)
         elif call.data == call_data[1]:
-            data_loads2 = json.load(open('./остановки.json'))
-            data2 = json.dumps(data_loads2)
-            json_data2 = json.loads(data2)
+            json_data2 = load_json('./остановки.json')
             route2_daycare = json_data2["Маршрут №2"]
             layout2 = ''
             key = 0
